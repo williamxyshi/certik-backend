@@ -1,3 +1,8 @@
+/**
+ * wont be needing this for the certik challenge
+ */
+
+
 const jwt = require("jsonwebtoken");
 
 module.exports = function(req, res, next) {
