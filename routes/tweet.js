@@ -6,6 +6,8 @@ const router = express.Router();
 const axios = require('axios')
 
 const TwitterService = require('../services/TwitterService')
+const SentimentAnalysisService = require('../services/SentimentAnalysisService')
+
 
 router.get(
   "/",
@@ -26,9 +28,12 @@ router.get(
     //   username,
     // } = req.query;
 
-    var service_response = await TwitterService.getTweets()
+    var tweet_response = await TwitterService.getTweets()
+    var sentiment_response = await SentimentAnalysisService.processText(tweet_response)
+
+
     return res.status(200).json({
-      data: service_response
+      data: sentiment_response
     })
 
     } catch (err) {
