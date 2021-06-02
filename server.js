@@ -7,6 +7,8 @@ const app = express();
 
 const cors = require("cors")
 
+port = process.env.PORT || 4000
+
 //middleware
 app.use(bodyParser.json());
 app.use(cors());
@@ -17,6 +19,6 @@ app.get("/", (req, res) => {
 
 app.use("/api/tweet/", tweet);
 
-app.listen(4000, (req, res) => {
-  console.log(`Server Started at http://localhost:4000`);
+app.listen(port, (req, res) => {
+  console.log(`Server Started at ${port}`);
 });
