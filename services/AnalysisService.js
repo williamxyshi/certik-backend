@@ -5,18 +5,38 @@ var Sentiment = require('sentiment');
 var sentiment = new Sentiment();
 
 /**
- * service that handles 
+ * service that handles the analysis of text
  */
 class AnalysisService{
 
-    processText(tweets){
+    processActivity(tweets){
+                 /**
+             * object that tracks twitter activity
+             */
+        var activity = {
+
+        }
+
+        tweets.forEach(element => {
+
+            var date = element.date                
+            if(activity.hasOwnProperty(date)){
+                activity[date] += 1
+            } else {
+                activity[date] = 1
+            }
+        }) 
+        return activity
+    }
+
+    processText(tokens){
         try{
             // const analyzer = new SentimentAnalyzer('English', PorterStemmer, 'afinn');
             // const analysis = analyzer.getSentiment(tweets); 
             // console.log(analysis)
 
             /**
-             * provavly dont need these if i have maps?
+             * used for percentages (waste of time to use map to find count)
              */
             var positive = 0
             var neutral = 0
@@ -26,42 +46,53 @@ class AnalysisService{
             var neutralj = {}
             var negativej = {}
 
-            tweets.forEach(element=>{
-                var analysis = sentiment.analyze(element);
+   
+
+            tokens.forEach(element=>{
+                /**
+                 * track created_at for activity graph
+                 */
+                // console.log(element)
+
+                /**
+                 * sentiment analysis
+                 */
+                var analysis = sentiment.analyze(element.text);
                 if(analysis.score>0){
                     positive += 1
-                    if(positivej.hasOwnProperty(element)){
-                        positivej[element].count += 1
+                    if(positivej.hasOwnProperty(element.text)){
+                        positivej[element.text].count += 1
                     } else {
-                        positivej[element] = {
+                        positivej[element.text] = {
                             score: analysis.score,
                             count: 1
                         }
                     }
 
-                    
                 } else if(analysis.score == 0){
                     neutral += 1
-                    if(neutralj.hasOwnProperty(element)){
-                        neutralj[element].count += 1
+                    if(neutralj.hasOwnProperty(element.text)){
+                        neutralj[element.text].count += 1
                     } else {
-                        neutralj[element] = {
+                        neutralj[element.text] = {
                             score: analysis.score,
                             count: 1
                         }
                     }
+
                 } else {
                     negative += 1
-                    if(negativej.hasOwnProperty(element)){
-                        negativej[element].count += 1
+                    if(negativej.hasOwnProperty(element.text)){
+                        negativej[element.text].count += 1
                     } else {
-                        negativej[element] = {
+                        negativej[element.text] = {
                             score: analysis.score,
                             count: 1
                         }
                     }
                 }
             })
+
             return {
                 positive: positivej,
                 neutral: neutralj,
@@ -71,12 +102,6 @@ class AnalysisService{
                     neutral: neutral,
                     negative: negative
                 }
-
-
-
-                // positive: positive,
-                // neutral: neutral,
-                // negative: negative
             }
         } catch(e){
             console.log(e)

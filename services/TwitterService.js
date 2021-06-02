@@ -5,7 +5,6 @@ const SW = require('stopword');
 
 
 /**
- 
     API key: WcdhN9xQzuptwlJoOj9xOaIua
     API secret key: 4PaTXIYO5Q1hcauw4Meeimvyvbnam2uNgvIwXLKPoeM6c2iFh4
     bearer token: AAAAAAAAAAAAAAAAAAAAADnWQAEAAAAAvW2EUVw7WJNOnuaVMBFYKaREVNU%3DUeqt0Tbo4INmp9jDtBiMoiMVvg5roLOOwgqayzmDNWILI2GqR3
@@ -15,11 +14,14 @@ const SW = require('stopword');
 const token = 'Bearer AAAAAAAAAAAAAAAAAAAAADnWQAEAAAAAvW2EUVw7WJNOnuaVMBFYKaREVNU%3DUeqt0Tbo4INmp9jDtBiMoiMVvg5roLOOwgqayzmDNWILI2GqR3'
 
 /**
- * service that handles 
+ * service that handles retrieving tweets from Twitter API and preprocessing
  */
 class TwitterService{
 
-    async getActivity(){}
+    async getActivity(){
+
+
+    }
     
     async getTweets(){
         try{
@@ -29,20 +31,19 @@ class TwitterService{
             { 
                 Params: {
                     'max_results': 100,
-                    // 'tweet.fields': 'created_at'
                 },
                 headers:{'Authorization': token}
             })
             var allTweets = response.data.data
             var paginToken = response.data.meta.next_token
+
             while(paginToken != undefined){
                 var response = await axios.get(
                     'https://api.twitter.com/2/users/1232319080637616128/tweets?tweet.fields=created_at', 
-                    { 
+                    {
                         params: {
                             'pagination_token': paginToken,
                             'max_results': 100,
-                            // 'tweet.fields': 'created_at'
                         },
                         headers:{'Authorization': token}
                     })
@@ -50,8 +51,7 @@ class TwitterService{
                 paginToken = response.data.meta.next_token
                 allTweets = allTweets.concat(response.data.data)
             }
-            console.log(allTweets)
-
+            //preprocessed single tokens ready for sentiment analysis
             var postPreTweest = this.preprocessText(allTweets)
             return postPreTweest
         } catch(e){
@@ -60,9 +60,16 @@ class TwitterService{
         }
     }
 
+    /**
+     *  get the contribution activity here
+     */
     preprocessText(tweets){
-        try{
-            var postpreTweets = []
+        try{                        
+            const currentDate = new Date()
+            const year = currentDate.getFullYear()
+
+            var processedTokens = []
+            var activityDates = []
             tweets.forEach(element => {
                 const lexed = aposToLexForm(element.text);
                 const cased = lexed.toLowerCase();
@@ -71,15 +78,25 @@ class TwitterService{
                 const tokenizer = new WordTokenizer();
                 const tokenized = tokenizer.tokenize(alphaonly);
                 const filteredReview = SW.removeStopwords(tokenized);
+                filteredReview.forEach(filteredElement=>{
+                    processedTokens.push({text:filteredElement})
+                })
 
-                filteredReview.forEach(element=>{
-                    postpreTweets.push(element)
-                })     
+                var tweetYear = element.created_at.slice(0,5)
+                var date = element.created_at.slice(0,10)
+
+                if(parseInt(year) - parseInt(tweetYear) < 2){
+                    activityDates.push({date: date})
+                }
                 // const filteredReview = SW.removeStopwords(alphaonly);
                 // postpreTweets.push(alphaonly)
          
             });
-            return postpreTweets
+
+            return {
+                tokens: processedTokens,
+                dates: activityDates
+            }
         } catch(e){
             console.log(e)
             return e

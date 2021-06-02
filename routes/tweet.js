@@ -29,11 +29,13 @@ router.get(
     // } = req.query;
 
     var tweet_response = await TwitterService.getTweets()
-    var sentiment_response = await AnalysisService.processText(tweet_response)
-
+    var sentiment_response = await AnalysisService.processText(tweet_response.tokens)
+    var activity_response = await AnalysisService.processActivity(tweet_response.dates)
+    
 
     return res.status(200).json({
-      data: sentiment_response
+      data: sentiment_response,
+      activity: activity_response
     })
 
     } catch (err) {

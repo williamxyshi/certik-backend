@@ -26,5 +26,8 @@
     "sentiment": "^5.0.2",
     "stopword": "^1.0.7",
     "twitter": "^1.7.1"
+  },
+  "engines": {
+    "node": "14.4.0"
   }
 }
