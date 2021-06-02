@@ -12,21 +12,14 @@ const AnalysisService = require('../services/AnalysisService')
 router.get(
   "/",
   [
-      query("startDate", "Please Enter a Valid StartDate")
-      .not()
-      .isEmpty()
+
   ],
   async (req, res) => {
     try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-          return res.status(400).json({
-              errors: errors.array()
-          });
-      }
+
 
     const {
-      startDate,
+      startDate
     } = req.query;
 
     var tweet_response = await TwitterService.getTweets(startDate)
