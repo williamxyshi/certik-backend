@@ -97,6 +97,9 @@ class AnalysisService{
                 positive: positivej,
                 neutral: neutralj,
                 negative: negativej,
+
+                // used to calculate percentages, because usign a map for tweets, getting total count
+                // is a waste of computation on the front end
                 count: { 
                     positive: positive,
                     neutral: neutral,

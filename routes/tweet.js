@@ -12,7 +12,6 @@ const AnalysisService = require('../services/AnalysisService')
 router.get(
   "/",
   [
-
   ],
   async (req, res) => {
     try {

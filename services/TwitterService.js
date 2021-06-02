@@ -4,14 +4,7 @@ const natural = require('natural')
 const SW = require('stopword');
 
 
-/**
-    API key: WcdhN9xQzuptwlJoOj9xOaIua
-    API secret key: 4PaTXIYO5Q1hcauw4Meeimvyvbnam2uNgvIwXLKPoeM6c2iFh4
-    bearer token: AAAAAAAAAAAAAAAAAAAAADnWQAEAAAAAvW2EUVw7WJNOnuaVMBFYKaREVNU%3DUeqt0Tbo4INmp9jDtBiMoiMVvg5roLOOwgqayzmDNWILI2GqR3
-
-    certikorg twitter id: 1232319080637616128
- */ 
-const token = 'Bearer AAAAAAAAAAAAAAAAAAAAADnWQAEAAAAAvW2EUVw7WJNOnuaVMBFYKaREVNU%3DUeqt0Tbo4INmp9jDtBiMoiMVvg5roLOOwgqayzmDNWILI2GqR3'
+const token = Process.env.BearerToken
 
 /**
  * service that handles retrieving tweets from Twitter API and preprocessing
