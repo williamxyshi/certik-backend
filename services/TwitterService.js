@@ -23,7 +23,7 @@ class TwitterService{
 
     }
     
-    async getTweets(){
+    async getTweets(startTime){
         try{
             // var response = await client.get('statuses/user_timeline',{'screen_name': 'CertikOrg', 'trim_user': 1, 'exclude_replies': true} )
             var response = await axios.get(
@@ -31,6 +31,7 @@ class TwitterService{
             { 
                 Params: {
                     'max_results': 100,
+                    'start_time': startTime
                 },
                 headers:{'Authorization': token}
             })
@@ -44,6 +45,7 @@ class TwitterService{
                         params: {
                             'pagination_token': paginToken,
                             'max_results': 100,
+                            'start_time': startTime
                         },
                         headers:{'Authorization': token}
                     })
@@ -84,10 +86,12 @@ class TwitterService{
 
                 var tweetYear = element.created_at.slice(0,5)
                 var date = element.created_at.slice(0,10)
+                activityDates.push({date: date})
 
-                if(parseInt(year) - parseInt(tweetYear) < 2){
-                    activityDates.push({date: date})
-                }
+                // if(parseInt(year) - parseInt(tweetYear) < 2){
+                //     activityDates.push({date: date})
+                // }
+
                 // const filteredReview = SW.removeStopwords(alphaonly);
                 // postpreTweets.push(alphaonly)
          

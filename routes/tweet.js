@@ -12,7 +12,7 @@ const AnalysisService = require('../services/AnalysisService')
 router.get(
   "/",
   [
-      query("username", "Please Enter a Valid Username")
+      query("startDate", "Please Enter a Valid StartDate")
       .not()
       .isEmpty()
   ],
@@ -24,11 +24,12 @@ router.get(
               errors: errors.array()
           });
       }
-    // const {
-    //   username,
-    // } = req.query;
 
-    var tweet_response = await TwitterService.getTweets()
+    const {
+      startDate,
+    } = req.query;
+
+    var tweet_response = await TwitterService.getTweets(startDate)
     var sentiment_response = await AnalysisService.processText(tweet_response.tokens)
     var activity_response = await AnalysisService.processActivity(tweet_response.dates)
     
@@ -44,6 +45,7 @@ router.get(
     }
   }
 );
+
 
 
 module.exports = router;
