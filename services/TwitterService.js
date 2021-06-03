@@ -3,8 +3,7 @@ const aposToLexForm = require('apos-to-lex-form');
 const natural = require('natural')
 const SW = require('stopword');
 
-const token = 'Bearer AAAAAAAAAAAAAAAAAAAAAGIlQQEAAAAAo1J4B5%2BhaucOaAWwh2w17%2BVxZAY%3DZzYfJaXfEvfLVpUiHQzWCFfOeJctiNm9pKAA4Ug6iMfUrS5j0E'
-
+const token = Process.env.BearerToken
 /**
  * service that handles retrieving tweets from Twitter API and preprocessing
  */
