@@ -45,6 +45,7 @@ class TwitterService{
                 paginToken = response.data.meta.next_token
                 allTweets = allTweets.concat(response.data.data)
             }
+            console.log(allTweets)
             //preprocessed single tokens ready for sentiment analysis
             var postPreTweest = this.preprocessText(allTweets)
             return postPreTweest
@@ -65,20 +66,23 @@ class TwitterService{
             var processedTokens = []
             var activityDates = []
             tweets.forEach(element => {
-                const lexed = aposToLexForm(element.text);
-                const cased = lexed.toLowerCase();
-                const alphaonly = cased.replace(/[^a-zA-Z\s]+/g, '');
-                const { WordTokenizer } = natural;
-                const tokenizer = new WordTokenizer();
-                const tokenized = tokenizer.tokenize(alphaonly);
-                const filteredReview = SW.removeStopwords(tokenized);
-                filteredReview.forEach(filteredElement=>{
-                    processedTokens.push({text:filteredElement})
-                })
-
-                var tweetYear = element.created_at.slice(0,5)
-                var date = element.created_at.slice(0,10)
-                activityDates.push({date: date})
+                if(element){
+                    const lexed = aposToLexForm(element.text);
+                    const cased = lexed.toLowerCase();
+                    const alphaonly = cased.replace(/[^a-zA-Z\s]+/g, '');
+                    const { WordTokenizer } = natural;
+                    const tokenizer = new WordTokenizer();
+                    const tokenized = tokenizer.tokenize(alphaonly);
+                    const filteredReview = SW.removeStopwords(tokenized);
+                    filteredReview.forEach(filteredElement=>{
+                        processedTokens.push({text:filteredElement})
+                    })
+    
+                    var tweetYear = element.created_at.slice(0,5)
+                    var date = element.created_at.slice(0,10)
+                    activityDates.push({date: date})
+                } 
+        
 
                 // if(parseInt(year) - parseInt(tweetYear) < 2){
                 //     activityDates.push({date: date})
